@@ -1,7 +1,15 @@
 // Tab functionality with smooth transitions
 function openTab(evt, tabName) {
+    if (!evt || !tabName) {
+        console.error('Invalid parameters for openTab:', evt, tabName);
+        return;
+    }
+    
     const tabContents = document.getElementsByClassName('tab-content');
     const tabButtons = document.getElementsByClassName('tab-button');
+    
+    console.log('Opening tab:', tabName);
+    console.log('Available tab contents:', Array.from(tabContents).map(el => el.id));
     
     // Hide all tab contents with fade out
     for (let content of tabContents) {
@@ -17,13 +25,28 @@ function openTab(evt, tabName) {
     // Remove active class from all buttons
     for (let button of tabButtons) {
         button.classList.remove('active');
+        console.log('Removed active from button:', button.textContent);
     }
     
-    // Show the selected tab and mark button as active with delay for smooth transition
-    setTimeout(() => {
-        document.getElementById(tabName).classList.add('active');
+    // Show the selected tab and mark button as active immediately (no delay)
+    const tabContent = document.getElementById(tabName);
+    if (tabContent) {
+        setTimeout(() => {
+            tabContent.classList.add('active');
+            console.log('Added active to tab content:', tabName);
+        }, 250);
+    } else {
+        console.error('Tab content not found:', tabName);
+        console.log('All elements with IDs:', Array.from(document.querySelectorAll('[id]')).map(el => el.id));
+    }
+    
+    if (evt.currentTarget) {
         evt.currentTarget.classList.add('active');
-    }, 250);
+        console.log('Added active to button:', evt.currentTarget.textContent);
+        console.log('Button classes:', evt.currentTarget.className);
+    } else {
+        console.error('Button target not found');
+    }
 }
 
 // Add fadeOut keyframe if not exists
