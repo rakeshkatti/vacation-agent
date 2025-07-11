@@ -159,8 +159,54 @@ document.getElementById('budget-form').addEventListener('submit', async (e) => {
     }
 });
 
+// Auto-detect location on page load
+async function autoDetectLocation() {
+    if (!navigator.geolocation) {
+        return; // Silently fail if geolocation not supported
+    }
+    
+    try {
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: false, // Use less accurate but faster detection
+                timeout: 5000, // Shorter timeout for auto-detection
+                maximumAge: 3600000 // 1 hour cache
+            });
+        });
+        
+        const { latitude, longitude } = position.coords;
+        
+        // Get city name from coordinates
+        const response = await fetch('/api/get-location-city', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ latitude, longitude })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            // Auto-fill all source city inputs
+            const sourceCityInputs = document.querySelectorAll('input[name="sourceCity"]');
+            sourceCityInputs.forEach(input => {
+                if (!input.value) { // Only fill if empty
+                    input.value = data.city;
+                    input.style.background = 'rgba(74, 222, 128, 0.1)'; // Light green background
+                    input.setAttribute('title', 'Auto-detected location');
+                }
+            });
+        }
+        
+    } catch (error) {
+        // Silently fail - don't show error for auto-detection
+        console.log('Auto-location detection skipped:', error.message);
+    }
+}
+
 // Enhanced form interactions and feedback
 document.addEventListener('DOMContentLoaded', function() {
+    // Auto-detect location on page load
+    autoDetectLocation();
+    
     // Add pulse animation to submit buttons when form is valid
     const forms = document.querySelectorAll('form');
     forms.forEach(form => {
