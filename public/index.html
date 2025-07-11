@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏖️ Vacation Planning Agent</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏖️ Vacation Planning Agent</h1>
+            <p>Plan your perfect vacation with AI assistance</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'plan-vacation')">Quick Plan</button>
+            <button class="tab-button" onclick="openTab(event, 'plan-vacation-advanced')">🚀 Advanced Plan</button>
+            <button class="tab-button" onclick="openTab(event, 'suggest-destinations')">Suggest Destinations</button>
+            <button class="tab-button" onclick="openTab(event, 'estimate-budget')">Estimate Budget</button>
+        </div>
+
+        <!-- Plan Vacation Tab -->
+        <div id="plan-vacation" class="tab-content active">
+            <h2>Plan Your Complete Vacation</h2>
+            <form id="vacation-form">
+                <div class="form-group">
+                    <label for="source-city">From (Source City) *</label>
+                    <div class="input-with-button">
+                        <input type="text" id="source-city" name="sourceCity" placeholder="e.g., New York, USA" required>
+                        <button type="button" class="location-btn" onclick="detectLocation('source-city')" title="Detect my location">
+                            📍
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="destination">To (Destination) *</label>
+                    <input type="text" id="destination" name="destination" placeholder="e.g., Barcelona, Spain" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="budget">Budget Amount *</label>
+                        <input type="number" id="budget" name="budgetAmount" placeholder="e.g., 2000" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">Currency *</label>
+                        <select id="currency" name="currency" required>
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="JPY">JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration">Number of Days *</label>
+                    <input type="number" id="duration" name="duration" placeholder="e.g., 5" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interests">Interests (comma-separated)</label>
+                    <input type="text" id="interests" name="interests" placeholder="e.g., food, culture, beaches">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travel-style">Travel Style</label>
+                    <select id="travel-style" name="travelStyle">
+                        <option value="budget">Budget</option>
+                        <option value="mid-range" selected>Mid-range</option>
+                        <option value="luxury">Luxury</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary">Generate Vacation Plan</button>
+            </form>
+            
+            <div id="vacation-result" class="result-container" style="display: none;">
+                <h3>Your Vacation Plan</h3>
+                <div id="vacation-plan" class="result-content"></div>
+            </div>
+        </div>
+
+        <!-- Advanced Plan Vacation Tab -->
+        <div id="plan-vacation-advanced" class="tab-content">
+            <h2>🚀 Advanced AI-Powered Vacation Planning</h2>
+            <p class="advanced-description">Experience our most sophisticated vacation planning with multi-step AI agents, real-time data integration, and comprehensive itinerary building.</p>
+            
+            <form id="vacation-advanced-form">
+                <div class="form-group">
+                    <label for="source-city-advanced">From (Source City) *</label>
+                    <div class="input-with-button">
+                        <input type="text" id="source-city-advanced" name="sourceCity" placeholder="e.g., New York, USA" required>
+                        <button type="button" class="location-btn" onclick="detectLocation('source-city-advanced')" title="Detect my location">
+                            📍
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="destination-advanced">To (Destination) *</label>
+                    <input type="text" id="destination-advanced" name="destination" placeholder="e.g., Barcelona, Spain" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="budget-advanced">Budget Amount *</label>
+                        <input type="number" id="budget-advanced" name="budgetAmount" placeholder="e.g., 2000" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="currency-advanced">Currency *</label>
+                        <select id="currency-advanced" name="currency" required>
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="JPY">JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration-advanced">Number of Days *</label>
+                    <input type="number" id="duration-advanced" name="duration" placeholder="e.g., 5" min="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="interests-advanced">Interests (comma-separated)</label>
+                    <input type="text" id="interests-advanced" name="interests" placeholder="e.g., food, culture, beaches, adventure, photography">
+                </div>
+                
+                <div class="form-group">
+                    <label for="travel-style-advanced">Travel Style</label>
+                    <select id="travel-style-advanced" name="travelStyle">
+                        <option value="budget">Budget</option>
+                        <option value="mid-range" selected>Mid-range</option>
+                        <option value="luxury">Luxury</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary">🚀 Start Advanced Planning</button>
+            </form>
+
+            <!-- Workflow Progress -->
+            <div id="workflow-progress" class="workflow-container" style="display: none;">
+                <h3>🔄 AI Planning in Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <div class="workflow-steps">
+                    <div class="step" data-step="analyze_preferences">🧠 Analyzing Preferences</div>
+                    <div class="step" data-step="suggest_destinations">🌍 Suggesting Destinations</div>
+                    <div class="step" data-step="research_destination">🔍 Researching Destination</div>
+                    <div class="step" data-step="find_flights">✈️ Finding Flights</div>
+                    <div class="step" data-step="find_accommodation">🏨 Finding Accommodation</div>
+                    <div class="step" data-step="plan_activities">🎯 Planning Activities</div>
+                    <div class="step" data-step="create_budget">💰 Creating Budget</div>
+                    <div class="step" data-step="get_weather">🌤️ Getting Weather Info</div>
+                    <div class="step" data-step="build_itinerary">📅 Building Itinerary</div>
+                    <div class="step" data-step="finalize_plan">✨ Finalizing Plan</div>
+                </div>
+                <div class="workflow-status">
+                    <p id="workflow-message">Initializing advanced planning...</p>
+                    <p id="workflow-time">Estimated time: 2-3 minutes</p>
+                </div>
+            </div>
+            
+            <div id="vacation-advanced-result" class="result-container" style="display: none;">
+                <h3>🎉 Your Complete Vacation Plan</h3>
+                <div id="vacation-advanced-plan" class="result-content"></div>
+            </div>
+        </div>
+
+        <!-- Suggest Destinations Tab -->
+        <div id="suggest-destinations" class="tab-content">
+            <h2>Get Destination Suggestions</h2>
+            <form id="destinations-form">
+                <div class="form-group">
+                    <label for="dest-source-city">From (Source City) *</label>
+                    <div class="input-with-button">
+                        <input type="text" id="dest-source-city" name="sourceCity" placeholder="e.g., Mumbai, India" required>
+                        <button type="button" class="location-btn" onclick="detectLocation('dest-source-city')" title="Detect my location">
+                            📍
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="climate">Climate Preference</label>
+                    <select id="climate" name="climate">
+                        <option value="any">Any</option>
+                        <option value="warm">Warm</option>
+                        <option value="cool">Cool</option>
+                        <option value="tropical">Tropical</option>
+                        <option value="temperate">Temperate</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="activities">Preferred Activities (comma-separated)</label>
+                    <input type="text" id="activities" name="activities" placeholder="e.g., beaches, culture, hiking">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dest-budget">Budget Amount</label>
+                        <input type="number" id="dest-budget" name="budgetAmount" placeholder="e.g., 1500" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label for="dest-currency">Currency</label>
+                        <select id="dest-currency" name="currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="JPY">JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="region">Region Preference</label>
+                    <input type="text" id="region" name="region" placeholder="e.g., Europe, Asia, worldwide">
+                </div>
+                
+                <button type="submit" class="btn-primary">Get Suggestions</button>
+            </form>
+            
+            <div id="destinations-result" class="result-container" style="display: none;">
+                <h3>Recommended Destinations</h3>
+                <div id="destinations-list" class="result-content"></div>
+            </div>
+        </div>
+
+        <!-- Estimate Budget Tab -->
+        <div id="estimate-budget" class="tab-content">
+            <h2>Estimate Your Budget</h2>
+            <form id="budget-form">
+                <div class="form-group">
+                    <label for="budget-source-city">From (Source City) *</label>
+                    <div class="input-with-button">
+                        <input type="text" id="budget-source-city" name="sourceCity" placeholder="e.g., London, UK" required>
+                        <button type="button" class="location-btn" onclick="detectLocation('budget-source-city')" title="Detect my location">
+                            📍
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="budget-destination">To (Destination) *</label>
+                    <input type="text" id="budget-destination" name="destination" placeholder="e.g., Paris, France" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="budget-duration">Number of Days *</label>
+                    <input type="number" id="budget-duration" name="duration" placeholder="e.g., 7" min="1" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="budget-style">Travel Style</label>
+                        <select id="budget-style" name="travelStyle">
+                            <option value="budget">Budget</option>
+                            <option value="mid-range" selected>Mid-range</option>
+                            <option value="luxury">Luxury</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="budget-currency">Currency</label>
+                        <select id="budget-currency" name="currency">
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="INR">INR (₹)</option>
+                            <option value="CAD">CAD (C$)</option>
+                            <option value="AUD">AUD (A$)</option>
+                            <option value="JPY">JPY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary">Estimate Budget</button>
+            </form>
+            
+            <div id="budget-result" class="result-container" style="display: none;">
+                <h3>Budget Estimate</h3>
+                <div id="budget-estimate" class="result-content"></div>
+            </div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Generating your personalized plan...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
